@@ -1,13 +1,4 @@
-/**********************
-//ÖÇÄÜÃÅËø
-//×÷Õß£º»¯×÷³¾
-//Ê±¼ä£º2020Äê6ÔÂ25ÈÕ12:50:43
-//qqÓÊÏä£º2809786963@qq.com
-//csdnÁ´½Ó£ºhttps://blog.csdn.net/mbs520/article/details/106987758
-//ßÙÁ¨ßÙÁ¨ÏîÄ¿ÊÓÆµ:https://b23.tv/bxfxvd
-//ßÙÁ¨ßÙÁ¨ÏîÄ¿Ô´´úÂë½²½â£ºhttps://www.bilibili.com/video/BV1m5411b7BX
-//×¢ÒâÊÂÏî£ºÊ¹ÓÃÀ¶ÑÀ´®¿Ú·¢ËÍÃÜÂëÊ±ĞèÒªÓĞÒÔ"::"½áÎ²µÄĞ§ÑéÂë£¬±ÈÈç"123456::"
-***********************/
+//æ³¨æ„äº‹é¡¹ï¼šä½¿ç”¨è“ç‰™ä¸²å£å‘é€å¯†ç æ—¶éœ€è¦æœ‰ä»¥"::"ç»“å°¾çš„æ•ˆéªŒç ï¼Œæ¯”å¦‚"123456::"
 #include "sys.h"
 #include "delay.h"
 #include "usart.h"
@@ -32,169 +23,169 @@
 #include "usart3.h"	
 #include "stmflash.h"
 
-#define usart2_baund  57600//´®¿Ú2²¨ÌØÂÊ£¬¸ù¾İÖ¸ÎÆÄ£¿é²¨ÌØÂÊ¸ü¸Ä
+#define usart2_baund  57600//ä¸²å£2æ³¢ç‰¹ç‡ï¼Œæ ¹æ®æŒ‡çº¹æ¨¡å—æ³¢ç‰¹ç‡æ›´æ”¹
 
-//ÒªĞ´Èëµ½STM32 FLASHµÄ×Ö·û´®Êı×é
+//è¦å†™å…¥åˆ°STM32 FLASHçš„å­—ç¬¦ä¸²æ•°ç»„
 const u8 TEXT_Buffer[]={0x17,0x23,0x6f,0x60,0,0};
-#define TEXT_LENTH sizeof(TEXT_Buffer)	 		  	//Êı×é³¤¶È	
+#define TEXT_LENTH sizeof(TEXT_Buffer)	 		  	//æ•°ç»„é•¿åº¦	
 #define SIZE TEXT_LENTH/4+((TEXT_LENTH%4)?1:0)
-#define FLASH_SAVE_ADDR  0X0802C124 	//ÉèÖÃFLASH ±£´æµØÖ·(±ØĞëÎªÅ¼Êı£¬ÇÒËùÔÚÉÈÇø,Òª´óÓÚ±¾´úÂëËùÕ¼ÓÃµ½µÄÉÈÇø.
-										//·ñÔò,Ğ´²Ù×÷µÄÊ±ºò,¿ÉÄÜ»áµ¼ÖÂ²Á³ıÕû¸öÉÈÇø,´Ó¶øÒıÆğ²¿·Ö³ÌĞò¶ªÊ§.ÒıÆğËÀ»ú.
+#define FLASH_SAVE_ADDR  0X0802C124 	//è®¾ç½®FLASH ä¿å­˜åœ°å€(å¿…é¡»ä¸ºå¶æ•°ï¼Œä¸”æ‰€åœ¨æ‰‡åŒº,è¦å¤§äºæœ¬ä»£ç æ‰€å ç”¨åˆ°çš„æ‰‡åŒº.
+										//å¦åˆ™,å†™æ“ä½œçš„æ—¶å€™,å¯èƒ½ä¼šå¯¼è‡´æ“¦é™¤æ•´ä¸ªæ‰‡åŒº,ä»è€Œå¼•èµ·éƒ¨åˆ†ç¨‹åºä¸¢å¤±.å¼•èµ·æ­»æœº.
 
-SysPara AS608Para;//Ö¸ÎÆÄ£¿éAS608²ÎÊı
-u16 ValidN;//Ä£¿éÄÚÓĞĞ§Ö¸ÎÆ¸öÊı
+SysPara AS608Para;//æŒ‡çº¹æ¨¡å—AS608å‚æ•°
+u16 ValidN;//æ¨¡å—å†…æœ‰æ•ˆæŒ‡çº¹ä¸ªæ•°
 u8** kbd_tbl;
 
-void Display_Data(void);//ÏÔÊ¾Ê±¼ä
-void Add_FR(void);	//Â¼Ö¸ÎÆ
-void Del_FR(void);	//É¾³ıÖ¸ÎÆ
-int press_FR(void);//Ë¢Ö¸ÎÆ
-void ShowErrMessage(u8 ensure);//ÏÔÊ¾È·ÈÏÂë´íÎóĞÅÏ¢
-int password(void);//ÃÜÂëËø
-void SetPassworld(void);//ĞŞ¸ÄÃÜÂë
-void starting(void);//¿ª»ú½çÃæĞÅÏ¢
-u8 MFRC522_lock(void);//Ë¢¿¨½âËø
-u8 Add_Rfid(void);		//Â¼Èë
+void Display_Data(void);//æ˜¾ç¤ºæ—¶é—´
+void Add_FR(void);	//å½•æŒ‡çº¹
+void Del_FR(void);	//åˆ é™¤æŒ‡çº¹
+int press_FR(void);//åˆ·æŒ‡çº¹
+void ShowErrMessage(u8 ensure);//æ˜¾ç¤ºç¡®è®¤ç é”™è¯¯ä¿¡æ¯
+int password(void);//å¯†ç é”
+void SetPassworld(void);//ä¿®æ”¹å¯†ç 
+void starting(void);//å¼€æœºç•Œé¢ä¿¡æ¯
+u8 MFRC522_lock(void);//åˆ·å¡è§£é”
+u8 Add_Rfid(void);		//å½•å…¥
 void Set_Time(void);
 void Massige(void);
-u8 Pwd[7]="      ";  //½âËøÃÜÂë1
-u8 Pwd2[7]="      ";  //½âËøÃÜÂë2
-u8 cardid[6]={0,0,0,0,0,0};  //¿¨ºÅ1
-int Error;  //ÃÜÂëÑéÖ¤ĞÅÏ¢
+u8 Pwd[7]="      ";  //è§£é”å¯†ç 1
+u8 Pwd2[7]="      ";  //è§£é”å¯†ç 2
+u8 cardid[6]={0,0,0,0,0,0};  //å¡å·1
+int Error;  //å¯†ç éªŒè¯ä¿¡æ¯
 
 
-//Êı×ÖµÄASCIIÂë
+//æ•°å­—çš„ASCIIç 
 uc8 numberascii[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
-//ÏÔÊ¾»º³åÇø
+//æ˜¾ç¤ºç¼“å†²åŒº
 u8  dispnumber5buf[6];
 u8  dispnumber3buf[4];
 u8  dispnumber2buf[3];
-//MFRC522Êı¾İÇø
+//MFRC522æ•°æ®åŒº
 u8  mfrc552pidbuf[18];
 u8  card_pydebuf[2];
 u8  card_numberbuf[5];
 u8  card_key0Abuf[6]={0xff,0xff,0xff,0xff,0xff,0xff};
 u8  card_writebuf[16]={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
 u8  card_readbuf[18];
-//SM05-SÊı¾İÇø
+//SM05-Sæ•°æ®åŒº
 u8  sm05cmdbuf[15]={14,128,0,22,5,0,0,0,4,1,157,16,0,0,21};
-//externÉùÃ÷±äÁ¿ÒÑÔÚÍâ²¿µÄCÎÄ¼şÀï¶¨Òå£¬¿ÉÒÔÔÚÖ÷ÎÄ¼şÖĞÊ¹ÓÃ
-extern u8  sm05receivebuf[16];	//ÔÚÖĞ¶ÏCÎÄ¼şÀï¶¨Òå
-extern u8  sm05_OK;							//ÔÚÖĞ¶ÏCÎÄ¼şÀï¶¨Òå
+//externå£°æ˜å˜é‡å·²åœ¨å¤–éƒ¨çš„Cæ–‡ä»¶é‡Œå®šä¹‰ï¼Œå¯ä»¥åœ¨ä¸»æ–‡ä»¶ä¸­ä½¿ç”¨
+extern u8  sm05receivebuf[16];	//åœ¨ä¸­æ–­Cæ–‡ä»¶é‡Œå®šä¹‰
+extern u8  sm05_OK;							//åœ¨ä¸­æ–­Cæ–‡ä»¶é‡Œå®šä¹‰
 
 u8 * week[7]={"Mon","Tue","Wed","Thu","Fri","Sat","Sun"};
-u8 * setup[7]={"1¡¢Â¼ÈëÖ¸ÎÆ","2¡¢É¾³ıÖ¸ÎÆ","3¡¢ĞŞ¸ÄÃÜÂë","4¡¢ĞŞ¸ÄÊ±¼ä","5¡¢Â¼Èë¿¨Æ¬","6¡¢²é¿´ĞÅÏ¢"};
+u8 * setup[7]={"1ã€å½•å…¥æŒ‡çº¹","2ã€åˆ é™¤æŒ‡çº¹","3ã€ä¿®æ”¹å¯†ç ","4ã€ä¿®æ”¹æ—¶é—´","5ã€å½•å…¥å¡ç‰‡","6ã€æŸ¥çœ‹ä¿¡æ¯"};
 
 int main(void)
 {
 	u16 set=0;
 	int key_num;
 	int time1;
-	int time2;		//ËøÆÁÊ±¼ä
-	char arrow=0;  //¼ıÍ·Î»×Ó
+	int time2;		//é”å±æ—¶é—´
+	char arrow=0;  //ç®­å¤´ä½å­
 	
-	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);//ÉèÖÃÏµÍ³ÖĞ¶ÏÓÅÏÈ¼¶·Ö×é2
-	My_RTC_Init();		 		//³õÊ¼»¯RTC
-	RTC_Set_WakeUp(RTC_WakeUpClock_CK_SPRE_16bits,0);		//ÅäÖÃWAKE UPÖĞ¶Ï,1ÃëÖÓÖĞ¶ÏÒ»´Î
-	delay_init(168);  //³õÊ¼»¯ÑÓÊ±º¯Êı
-	uart_init(115200);	//³õÊ¼»¯´®¿Ú1²¨ÌØÂÊÎª115200£¬ÓÃÓÚÖ§³ÖUSMART
-	uart3_init(9600);// À¶ÑÀ³õÊ¼»¯
-	usart2_init(usart2_baund);//³õÊ¼»¯´®¿Ú2,ÓÃÓÚÓëÖ¸ÎÆÄ£¿éÍ¨Ñ¶
-	PS_StaGPIO_Init();	//³õÊ¼»¯FR¶Á×´Ì¬Òı½Å
-	LED_Init();					//³õÊ¼»¯LED  
-	//	BEEP_Init();    		//beep³õÊ¼»¯
-	Button4_4_Init();//¾ØÕó°´¼ü³õÊ¼»¯
-	OLED_Init(); 			//oled³õÊ¼»¯
-	W25QXX_Init();				//³õÊ¼»¯W25Q128
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);//è®¾ç½®ç³»ç»Ÿä¸­æ–­ä¼˜å…ˆçº§åˆ†ç»„2
+	My_RTC_Init();		 		//åˆå§‹åŒ–RTC
+	RTC_Set_WakeUp(RTC_WakeUpClock_CK_SPRE_16bits,0);		//é…ç½®WAKE UPä¸­æ–­,1ç§’é’Ÿä¸­æ–­ä¸€æ¬¡
+	delay_init(168);  //åˆå§‹åŒ–å»¶æ—¶å‡½æ•°
+	uart_init(115200);	//åˆå§‹åŒ–ä¸²å£1æ³¢ç‰¹ç‡ä¸º115200ï¼Œç”¨äºæ”¯æŒUSMART
+	uart3_init(9600);// è“ç‰™åˆå§‹åŒ–
+	usart2_init(usart2_baund);//åˆå§‹åŒ–ä¸²å£2,ç”¨äºä¸æŒ‡çº¹æ¨¡å—é€šè®¯
+	PS_StaGPIO_Init();	//åˆå§‹åŒ–FRè¯»çŠ¶æ€å¼•è„š
+	LED_Init();					//åˆå§‹åŒ–LED  
+	//	BEEP_Init();    		//beepåˆå§‹åŒ–
+	Button4_4_Init();//çŸ©é˜µæŒ‰é”®åˆå§‹åŒ–
+	OLED_Init(); 			//oledåˆå§‹åŒ–
+	W25QXX_Init();				//åˆå§‹åŒ–W25Q128
 	
-	Walkmotor_Init(); //²½½øµç»ú³õÊ¼»¯
-	my_mem_init(SRAMIN);		//³õÊ¼»¯ÄÚ²¿ÄÚ´æ³Ø 
-	my_mem_init(SRAMCCM);		//³õÊ¼»¯CCMÄÚ´æ³Ø 
-	exfuns_init();				//ÎªfatfsÏà¹Ø±äÁ¿ÉêÇëÄÚ´æ  
-  f_mount(fs[0],"0:",1); 		//¹ÒÔØSD¿¨ 
- 	f_mount(fs[1],"1:",1); 		//¹ÒÔØFLASH.
-	starting();//¿ª»úĞÅÏ¢  logo
+	Walkmotor_Init(); //æ­¥è¿›ç”µæœºåˆå§‹åŒ–
+	my_mem_init(SRAMIN);		//åˆå§‹åŒ–å†…éƒ¨å†…å­˜æ±  
+	my_mem_init(SRAMCCM);		//åˆå§‹åŒ–CCMå†…å­˜æ±  
+	exfuns_init();				//ä¸ºfatfsç›¸å…³å˜é‡ç”³è¯·å†…å­˜  
+  f_mount(fs[0],"0:",1); 		//æŒ‚è½½SDå¡ 
+ 	f_mount(fs[1],"1:",1); 		//æŒ‚è½½FLASH.
+	starting();//å¼€æœºä¿¡æ¯  logo
 	
 	
-	//0X08020004  ÃÜÂë1
-	//0X08090004	ÃÜÂë2
-	//0X080f0004	¿¨ºÅ1
+	//0X08020004  å¯†ç 1
+	//0X08090004	å¯†ç 2
+	//0X080f0004	å¡å·1
 	//	STMFLASH_Write(FLASH_SAVE_ADDR,(u32*)TEXT_Buffer,SIZE);
-	STMFLASH_Read(0X08020004,(u32*)Pwd,2);	//¶ÁÈ¡ÃÜÂë1
-	STMFLASH_Read(0X08090004,(u32*)Pwd2,2); //¶ÁÈ¡ÃÜÂë2
-	STMFLASH_Read(0X080f0004,(u32*)cardid,1); //¶ÁÈ¡¿¨ºÅ1
+	STMFLASH_Read(0X08020004,(u32*)Pwd,2);	//è¯»å–å¯†ç 1
+	STMFLASH_Read(0X08090004,(u32*)Pwd2,2); //è¯»å–å¯†ç 2
+	STMFLASH_Read(0X080f0004,(u32*)cardid,1); //è¯»å–å¡å·1
 //	printf("pwd=%s",Pwd);
 //	printf("pwd2=%s",Pwd2);
 //	printf("cardid={%X,%X,%X,%X}\n",cardid[0],cardid[1],cardid[2],cardid[3]);
 
 	 while(1)
 	 {
-//ËøÆÁ½çÃæ
+//é”å±ç•Œé¢
 MAIN:
-			OLED_Show_Font(56,48,0);//ÏÔÊ¾ËøÍ¼±ê
+			OLED_Show_Font(56,48,0);//æ˜¾ç¤ºé”å›¾æ ‡
 			while(1)
 			{
 					time1++;
-					if((time1%2000)==0)//Ê±¼äÏÔÊ¾£ºÃ¿50ms¸üĞÂÒ»´ÎÏÔÊ¾Êı¾İ
+					if((time1%2000)==0)//æ—¶é—´æ˜¾ç¤ºï¼šæ¯50msæ›´æ–°ä¸€æ¬¡æ˜¾ç¤ºæ•°æ®
 					{
 						Display_Data();
 					}
-					if((time1%5000)==0)//Ã¿200ms¼ì²âÒ»´Î¿¨Æ¬£¬À¶ÑÀÊı¾İ
+					if((time1%5000)==0)//æ¯200msæ£€æµ‹ä¸€æ¬¡å¡ç‰‡ï¼Œè“ç‰™æ•°æ®
 					{
-						//MFRC522½âËø
+						//MFRC522è§£é”
 						time1=0;
 						MFRC522_Initializtion();			
 						Error=MFRC522_lock();
 						if(Error==0)goto MENU;	
 						else 
-							OLED_Show_Font(56,48,0);//Ëø
-						//ÊÖ»úÀ¶ÑÀ½âËøÃÜÂë1
+							OLED_Show_Font(56,48,0);//é”
+						//æ‰‹æœºè“ç‰™è§£é”å¯†ç 1
 						Error=usart3_cherk((char*)Pwd);         
 						if(Error==0){
 							OLED_Clear();
-							Show_Str(20,10,128,24,"½âËøÖĞ...",24,0);	
+							Show_Str(20,10,128,24,"è§£é”ä¸­...",24,0);	
 							Walkmotor_ON();
-							Show_Str(20,10,128,24,"ÒÑ½âËø£¡",24,0);
+							Show_Str(20,10,128,24,"å·²è§£é”ï¼",24,0);
 							goto MENU;	
 						}
 						else 
-							OLED_Show_Font(56,48,0);//Ëø
-						//ÊÖ»úÀ¶ÑÀ½âËøÃÜÂë2
+							OLED_Show_Font(56,48,0);//é”
+						//æ‰‹æœºè“ç‰™è§£é”å¯†ç 2
 						Error=usart3_cherk((char*)Pwd2);
 						if(Error==0){
 							OLED_Clear();
-							Show_Str(20,10,128,24,"½âËøÖĞ...",24,0);	
+							Show_Str(20,10,128,24,"è§£é”ä¸­...",24,0);	
 							Walkmotor_ON();
-							Show_Str(20,10,128,24,"ÒÑ½âËø£¡",24,0);
+							Show_Str(20,10,128,24,"å·²è§£é”ï¼",24,0);
 							goto MENU;	
 						}
 						else 
-							OLED_Show_Font(56,48,0);//Ëø
+							OLED_Show_Font(56,48,0);//é”
 						
 					} 
-					//Ö¸ÎÆ½âËø
-					if(PS_Sta)	 //¼ì²âPS_Sta×´Ì¬£¬Èç¹ûÓĞÊÖÖ¸°´ÏÂ
+					//æŒ‡çº¹è§£é”
+					if(PS_Sta)	 //æ£€æµ‹PS_StaçŠ¶æ€ï¼Œå¦‚æœæœ‰æ‰‹æŒ‡æŒ‰ä¸‹
 					{
 							while(PS_Sta){
-							Error=press_FR();//Ë¢Ö¸ÎÆ
+							Error=press_FR();//åˆ·æŒ‡çº¹
 							if(Error==0)goto MENU;
 							else 
-								OLED_Show_Font(56,48,0);//Ëø
+								OLED_Show_Font(56,48,0);//é”
 						}
 					}
-					//ÃÜÂëËø
-					key_num=Button4_4_Scan();	//°´¼üÉ¨Ãè
+					//å¯†ç é”
+					key_num=Button4_4_Scan();	//æŒ‰é”®æ‰«æ
 					if(key_num!=-1)
 					{
 						Error=password();
 						if(Error==0)goto MENU;	
 						else 
-							OLED_Show_Font(56,48,0);//Ëø
+							OLED_Show_Font(56,48,0);//é”
 					}
 			}
-//Ö÷½çÃæ
+//ä¸»ç•Œé¢
 MENU:
-			//Ö÷Ò³²Ëµ¥ÏÔÊ¾
+			//ä¸»é¡µèœå•æ˜¾ç¤º
 			OLED_Clear();
 			if(arrow<3){
 				Show_Str(5,arrow*16,128,16,"->",16,0);
@@ -205,22 +196,22 @@ MENU:
 			Show_Str(25,0,128,16,setup[set],16,0);
 			Show_Str(25,16,128,16,setup[set+1],16,0);
 			Show_Str(25,32,128,16,setup[set+2],16,0);
-			Show_Str(0,52,128,12,"ÉÏ   ÏÂ   Ëø¶¨  È·¶¨",12,0);
+			Show_Str(0,52,128,12,"ä¸Š   ä¸‹   é”å®š  ç¡®å®š",12,0);
 			time2=0;
 			while(1)
 			{
-				//³¬Ê±ËøÆÁ
+				//è¶…æ—¶é”å±
 				time2++;
 				if(time2>10000 | key_num==15){  
 					time2 =0;
 					OLED_Clear();
-						Show_Str(30,20,128,16,"ÒÑËø¶¨£¡",16,0);
-						OLED_Show_Font(56,48,0);//Ëø
+						Show_Str(30,20,128,16,"å·²é”å®šï¼",16,0);
+						OLED_Show_Font(56,48,0);//é”
 						delay_ms(1000);
 						OLED_Clear();
 						goto MAIN;
 				}
-				//¹¦ÄÜÑ¡ÏîÑ¡Ôñ
+				//åŠŸèƒ½é€‰é¡¹é€‰æ‹©
 				key_num=Button4_4_Scan();	
 				if(key_num)
 				{
@@ -235,12 +226,12 @@ MENU:
 					if(key_num==16){
 						switch(arrow)
 						{
-							case 0:Add_FR();		break;//Â¼Ö¸
-							case 1:Del_FR();		break;//É¾Ö¸ÎÆ
-							case 2:SetPassworld();break;//ĞŞ¸ÄÃÜÂë
-							case 3:Set_Time(); break;  //ÉèÖÃÊ±¼ä
-							case 4:Add_Rfid(); break;  //Â¼Èë¿¨Æ¬
-							case 5:Massige(); break;  //ÏÔÊ¾ĞÅÏ¢
+							case 0:Add_FR();		break;//å½•æŒ‡
+							case 1:Del_FR();		break;//åˆ æŒ‡çº¹
+							case 2:SetPassworld();break;//ä¿®æ”¹å¯†ç 
+							case 3:Set_Time(); break;  //è®¾ç½®æ—¶é—´
+							case 4:Add_Rfid(); break;  //å½•å…¥å¡ç‰‡
+							case 5:Massige(); break;  //æ˜¾ç¤ºä¿¡æ¯
 						}
 						goto MENU;
 					}		
@@ -250,7 +241,7 @@ MENU:
 }//main
 
 
-//ÏÔÊ¾Ê±¼ä
+//æ˜¾ç¤ºæ—¶é—´
 void Display_Data(void)
 {
 	RTC_TimeTypeDef RTC_TimeStruct;
@@ -266,7 +257,7 @@ void Display_Data(void)
 	sprintf((char*)tbuf,"%s",week[RTC_DateStruct.RTC_WeekDay-1]); 
 	OLED_ShowString(110,12,tbuf,12);	
 }
-//»ñÈ¡¼üÅÌÊıÖµ
+//è·å–é”®ç›˜æ•°å€¼
 u16 GET_NUM(void)
 {
 	u8  key_num=0;
@@ -276,18 +267,18 @@ u16 GET_NUM(void)
 		key_num=Button4_4_Scan();	
 		if(key_num)
 		{
-			if(key_num==13)return 0xFFFF;//¡®·µ»Ø¡¯¼ü
+			if(key_num==13)return 0xFFFF;//â€˜è¿”å›â€™é”®
 			if(key_num==14)return 0xFF00;//		
-			if(key_num>0&&key_num<10&&num<99)//¡®1-9¡¯¼ü(ÏŞÖÆÊäÈë3Î»Êı)
+			if(key_num>0&&key_num<10&&num<99)//â€˜1-9â€™é”®(é™åˆ¶è¾“å…¥3ä½æ•°)
 				num =num*10+key_num;		
-			if(key_num==15)num =num/10;//¡®Del¡¯¼ü			
-			if(key_num==10&&num<99)num =num*10;//¡®0¡¯¼ü
-			if(key_num==16)return num;  //¡®Enter¡¯¼ü
+			if(key_num==15)num =num/10;//â€˜Delâ€™é”®			
+			if(key_num==10&&num<99)num =num*10;//â€˜0â€™é”®
+			if(key_num==16)return num;  //â€˜Enterâ€™é”®
 		}
 		OLED_ShowNum(78,32,num,3,12);
 	}	
 }
-//ÃÜÂëËø
+//å¯†ç é”
 int password(void)
 {
 	int  key_num=0,i=0,satus=0;
@@ -295,214 +286,214 @@ int password(void)
 	u8 pwd[11]="          ";
 	u8 hidepwd[11]="          ";
 	
-	OLED_Clear();//ÇåÆÁ
-	Show_Str(5,0,128,16,"ÃÜÂë£º",16,0);
+	OLED_Clear();//æ¸…å±
+	Show_Str(5,0,128,16,"å¯†ç ï¼š",16,0);
 	Show_Str(10,16,128,12," 1   2   3   4  ",12,0);
 	Show_Str(10,28,128,12," 5   6   7   8  ",12,0);
 	Show_Str(10,40,128,12," 9   0      Dis ",12,0);
 	Show_Str(10,52,128,12,"Del Clr Bck Ok  ",12,0);
-//	Show_Str(102,36,128,12,"ÏÔÊ¾",12,0);
-//	Show_Str(0,52,128,12,"É¾³ı Çå¿Õ   ·µ»Ø È·ÈÏ",12,0);
+//	Show_Str(102,36,128,12,"æ˜¾ç¤º",12,0);
+//	Show_Str(0,52,128,12,"åˆ é™¤ æ¸…ç©º   è¿”å› ç¡®è®¤",12,0);
 	while(1)
 	{
 		key_num=Button4_4_Scan();	
 		if(key_num)
 		{	
 			time3=0;
-			if(key_num>=1 && key_num<10 && i>=0 && i<10){  //¡®1-9¡¯¼ü
+			if(key_num>=1 && key_num<10 && i>=0 && i<10){  //â€˜1-9â€™é”®
 				pwd[i]=key_num+0x30;
 				hidepwd[i]='*';
 				i++;
 			}	
-			if(key_num==10 && i>=0 && i<10){       //¡®0¡¯¼ü
+			if(key_num==10 && i>=0 && i<10){       //â€˜0â€™é”®
 				pwd[i]=0x30;
 				hidepwd[i]='*';
 				i++;
 			}
-			if(key_num==12){//ÏÔÊ¾  
+			if(key_num==12){//æ˜¾ç¤º  
 				satus=!satus;
 			}
 			if(key_num==13 && i>0){
-				pwd[--i]=' ';  //¡®del¡¯¼ü
+				pwd[--i]=' ';  //â€˜delâ€™é”®
 				hidepwd[i]=' '; 
 			}
 			if(key_num==14){
 				while(i--){
-					pwd[i]=' ';  //¡®Çå¿Õ¡¯¼ü
-					hidepwd[i]=' ';  //¡®Çå¿Õ¡¯¼ü
+					pwd[i]=' ';  //â€˜æ¸…ç©ºâ€™é”®
+					hidepwd[i]=' ';  //â€˜æ¸…ç©ºâ€™é”®
 				}
 				i=0;
 			}
-			if(key_num==15){//·µ»Ø
-				OLED_Clear();//ÇåÆÁ
+			if(key_num==15){//è¿”å›
+				OLED_Clear();//æ¸…å±
 				delay_ms(500);
 				return -1;
 			}
-			if(key_num==16)break;  //¡®Enter¡¯¼ü
+			if(key_num==16)break;  //â€˜Enterâ€™é”®
 		}
 		if(satus==0)OLED_ShowString(53,0,hidepwd,12);
 		else OLED_ShowString(53,0,pwd,12);
 		
 		time3++;
 		if(time3%1000==0){
-			OLED_Clear();//ÇåÆÁ
+			OLED_Clear();//æ¸…å±
 			return -1;
 		}
 	}	
-	for(i=0; i<10; i++){   //ÑéÖ¤ĞéÎ±ÃÜÂë
+	for(i=0; i<10; i++){   //éªŒè¯è™šä¼ªå¯†ç 
 		if(pwd[i]==Pwd[num])num++;
 			else num=0;
 		if(num==6)
 			break;
 	}
-	for(i=0; i<10; i++){   //ÑéÖ¤ÃÜÂë
+	for(i=0; i<10; i++){   //éªŒè¯å¯†ç 
 		if(pwd[i]==Pwd2[num2])num2++;
 			else num2=0;
 		if(num2==6)
 			break;
 	}
 	if(num==6 | num2==6){
-		OLED_Clear();//ÇåÆÁ
-		Show_Str(20,10,128,24,"½âËøÖĞ...",24,0);	
+		OLED_Clear();//æ¸…å±
+		Show_Str(20,10,128,24,"è§£é”ä¸­...",24,0);	
 		Walkmotor_ON();
-		Show_Str(20,10,128,24,"ÒÑ½âËø£¡ ",24,0);	
-		OLED_Show_Font(56,48,1);//¿ªËø		
+		Show_Str(20,10,128,24,"å·²è§£é”ï¼ ",24,0);	
+		OLED_Show_Font(56,48,1);//å¼€é”		
 		delay_ms(1500);
-		OLED_Clear();//ÇåÆÁ
+		OLED_Clear();//æ¸…å±
 		return 0;
 	}
 		else {
-			OLED_Clear();//ÇåÆÁ
-			Show_Str(45,48,128,16,"ÃÜÂë´íÎó£¡",16,0);
+			OLED_Clear();//æ¸…å±
+			Show_Str(45,48,128,16,"å¯†ç é”™è¯¯ï¼",16,0);
 			delay_ms(1500);
-			OLED_Clear();//ÇåÆÁ
+			OLED_Clear();//æ¸…å±
 			return -1;
 		}
 	
 }
 
 
-//ÏÔÊ¾È·ÈÏÂë´íÎóĞÅÏ¢
+//æ˜¾ç¤ºç¡®è®¤ç é”™è¯¯ä¿¡æ¯
 void ShowErrMessage(u8 ensure)
 {
 	Show_Str(0,48,128,12,(u8*)EnsureMessage(ensure),12,0);	
 	delay_ms(300);
 	OLED_ShowString(0,48,"                ",12);	
 }
-//Â¼Ö¸ÎÆ
+//å½•æŒ‡çº¹
 void Add_FR(void)
 {
 	u8 i,ensure ,processnum=0;
 	int key_num;
 	u16 ID;
-	OLED_Clear();//ÇåÆÁ
+	OLED_Clear();//æ¸…å±
 	while(1)
 	{
 		key_num=Button4_4_Scan();	
 		if(key_num==16){
-			OLED_Clear();//ÇåÆÁ
+			OLED_Clear();//æ¸…å±
 			return ;
 		}
 		switch (processnum)
 		{
 			case 0:
-				//OLED_Clear();//ÇåÆÁ
+				//OLED_Clear();//æ¸…å±
 				i++;
-				Show_Str(0,0,128,16,"=== Â¼ÈëÖ¸ÎÆ ===",16,0);
-				Show_Str(0,24,128,12,"Çë°´Ö¸ÎÆ£¡  ",12,0);	
-				Show_Str(104,52,128,12,"·µ»Ø",12,0);			
+				Show_Str(0,0,128,16,"=== å½•å…¥æŒ‡çº¹ ===",16,0);
+				Show_Str(0,24,128,12,"è¯·æŒ‰æŒ‡çº¹ï¼  ",12,0);	
+				Show_Str(104,52,128,12,"è¿”å›",12,0);			
 				ensure=PS_GetImage();
 				if(ensure==0x00) 
 				{
 					BEEP=1;
-					ensure=PS_GenChar(CharBuffer1);//Éú³ÉÌØÕ÷
+					ensure=PS_GenChar(CharBuffer1);//ç”Ÿæˆç‰¹å¾
 					BEEP=0;
 					if(ensure==0x00)
 					{
-						Show_Str(0,24,128,12,"Ö¸ÎÆÕı³££¡    ",12,0);	
+						Show_Str(0,24,128,12,"æŒ‡çº¹æ­£å¸¸ï¼    ",12,0);	
 						i=0;
-						processnum=1;//Ìøµ½µÚ¶ş²½						
+						processnum=1;//è·³åˆ°ç¬¬äºŒæ­¥						
 					}else ShowErrMessage(ensure);				
 				}else ShowErrMessage(ensure);
-				//OLED_Clear();//ÇåÆÁ
+				//OLED_Clear();//æ¸…å±
 				break;
 			
 			case 1:
 				i++;
-				Show_Str(0,24,128,12,"ÇëÔÙ°´Ò»´ÎÖ¸ÎÆ",12,0);		
+				Show_Str(0,24,128,12,"è¯·å†æŒ‰ä¸€æ¬¡æŒ‡çº¹",12,0);		
 				ensure=PS_GetImage();
 				if(ensure==0x00) 
 				{
 					BEEP=1;
-					ensure=PS_GenChar(CharBuffer2);//Éú³ÉÌØÕ÷
+					ensure=PS_GenChar(CharBuffer2);//ç”Ÿæˆç‰¹å¾
 					BEEP=0;
 					if(ensure==0x00)
 					{
-						Show_Str(0,24,128,12,"Ö¸ÎÆÕı³££¡",12,0);	
+						Show_Str(0,24,128,12,"æŒ‡çº¹æ­£å¸¸ï¼",12,0);	
 						i=0;
-						processnum=2;//Ìøµ½µÚÈı²½
+						processnum=2;//è·³åˆ°ç¬¬ä¸‰æ­¥
 					}else ShowErrMessage(ensure);	
 				}else ShowErrMessage(ensure);		
-				//OLED_Clear();//ÇåÆÁ
+				//OLED_Clear();//æ¸…å±
 				break;
 
 			case 2:		
-				Show_Str(0,24,128,12,"¶Ô±ÈÁ½´ÎÖ¸ÎÆ        ",12,0);
+				Show_Str(0,24,128,12,"å¯¹æ¯”ä¸¤æ¬¡æŒ‡çº¹        ",12,0);
 				ensure=PS_Match();
 				if(ensure==0x00) 
 				{
-					Show_Str(0,24,128,12,"Á½´ÎÖ¸ÎÆÒ»Ñù       ",12,0);
-					processnum=3;//Ìøµ½µÚËÄ²½
+					Show_Str(0,24,128,12,"ä¸¤æ¬¡æŒ‡çº¹ä¸€æ ·       ",12,0);
+					processnum=3;//è·³åˆ°ç¬¬å››æ­¥
 				}
 				else 
 				{
-					Show_Str(0,24,128,12,"¶Ô±ÈÊ§°Ü ÇëÖØÂ¼    ",12,0);	
+					Show_Str(0,24,128,12,"å¯¹æ¯”å¤±è´¥ è¯·é‡å½•    ",12,0);	
 					ShowErrMessage(ensure);
 					i=0;
-					OLED_Clear();//ÇåÆÁ
-					processnum=0;//Ìø»ØµÚÒ»²½		
+					OLED_Clear();//æ¸…å±
+					processnum=0;//è·³å›ç¬¬ä¸€æ­¥		
 				}
 				delay_ms(1200);
-				//OLED_Clear();//ÇåÆÁ
+				//OLED_Clear();//æ¸…å±
 				break;
 
 			case 3:
-			Show_Str(0,24,128,12,"Éú³ÉÖ¸ÎÆÄ£°å...   ",12,0);	
+			Show_Str(0,24,128,12,"ç”ŸæˆæŒ‡çº¹æ¨¡æ¿...   ",12,0);	
 				ensure=PS_RegModel();
 				if(ensure==0x00) 
 				{
 //					
-					Show_Str(0,24,128,12,"Éú³ÉÖ¸ÎÆÄ£°å³É¹¦!",12,0);
-					processnum=4;//Ìøµ½µÚÎå²½
+					Show_Str(0,24,128,12,"ç”ŸæˆæŒ‡çº¹æ¨¡æ¿æˆåŠŸ!",12,0);
+					processnum=4;//è·³åˆ°ç¬¬äº”æ­¥
 				}else {processnum=0;ShowErrMessage(ensure);}
 				delay_ms(1200);
 				break;
 				
 			case 4:	
-				//OLED_Clear();//ÇåÆÁ
-			Show_Str(0,24,128,12,"ÇëÊäÈë´¢´æID:      ",12,0);
+				//OLED_Clear();//æ¸…å±
+			Show_Str(0,24,128,12,"è¯·è¾“å…¥å‚¨å­˜ID:      ",12,0);
 			Show_Str(122,52,128,12," ",12,0);
-			Show_Str(0,52,128,12,"É¾³ı Çå¿Õ        È·ÈÏ",12,0);
+			Show_Str(0,52,128,12,"åˆ é™¤ æ¸…ç©º        ç¡®è®¤",12,0);
 				do
 					ID=GET_NUM();
-				while(!(ID<AS608Para.PS_max));//ÊäÈëID±ØĞëĞ¡ÓÚÄ£¿éÈİÁ¿×î´óµÄÊıÖµ
-				ensure=PS_StoreChar(CharBuffer2,ID);//´¢´æÄ£°å
+				while(!(ID<AS608Para.PS_max));//è¾“å…¥IDå¿…é¡»å°äºæ¨¡å—å®¹é‡æœ€å¤§çš„æ•°å€¼
+				ensure=PS_StoreChar(CharBuffer2,ID);//å‚¨å­˜æ¨¡æ¿
 				if(ensure==0x00) 
 				{			
-          OLED_Clear();//ÇåÆÁ
-					Show_Str(0,30,128,16,"Â¼Ö¸ÎÆ³É¹¦!",16,0);	
-					PS_ValidTempleteNum(&ValidN);//¶Á¿âÖ¸ÎÆ¸öÊı
-					Show_Str(66,52,128,12,"Ê£Óà",12,0);
+          OLED_Clear();//æ¸…å±
+					Show_Str(0,30,128,16,"å½•æŒ‡çº¹æˆåŠŸ!",16,0);	
+					PS_ValidTempleteNum(&ValidN);//è¯»åº“æŒ‡çº¹ä¸ªæ•°
+					Show_Str(66,52,128,12,"å‰©ä½™",12,0);
 					OLED_ShowNum(90,52,AS608Para.PS_max-ValidN,3,12);
 					delay_ms(1500);
 					OLED_Clear();	
 					return ;
 				}else {processnum=0;ShowErrMessage(ensure);}
-				OLED_Clear();//ÇåÆÁ					
+				OLED_Clear();//æ¸…å±					
 				break;				
 		}
 		delay_ms(400);
-		if(i==10)//³¬¹ı5´ÎÃ»ÓĞ°´ÊÖÖ¸ÔòÍË³ö
+		if(i==10)//è¶…è¿‡5æ¬¡æ²¡æœ‰æŒ‰æ‰‹æŒ‡åˆ™é€€å‡º
 		{
 			OLED_Clear();
 			break;
@@ -510,7 +501,7 @@ void Add_FR(void)
 	}
 }
 
-//Ë¢Ö¸ÎÆ
+//åˆ·æŒ‡çº¹
 int press_FR(void)
 {
 	SearchResult seach;
@@ -518,25 +509,25 @@ int press_FR(void)
 	char *str;
 	ensure=PS_GetImage();
 	OLED_Clear();
-		Show_Str(0,0,128,16,"ÕıÔÚ¼ì²âÖ¸ÎÆ",16,0);
-	if(ensure==0x00)//»ñÈ¡Í¼Ïñ³É¹¦ 
+		Show_Str(0,0,128,16,"æ­£åœ¨æ£€æµ‹æŒ‡çº¹",16,0);
+	if(ensure==0x00)//è·å–å›¾åƒæˆåŠŸ 
 	{	
-		BEEP=1;//´ò¿ª·äÃùÆ÷	
+		BEEP=1;//æ‰“å¼€èœ‚é¸£å™¨	
 		ensure=PS_GenChar(CharBuffer1);
-		if(ensure==0x00) //Éú³ÉÌØÕ÷³É¹¦
+		if(ensure==0x00) //ç”Ÿæˆç‰¹å¾æˆåŠŸ
 		{		
 			
-			BEEP=0;//¹Ø±Õ·äÃùÆ÷	
+			BEEP=0;//å…³é—­èœ‚é¸£å™¨	
 			ensure=PS_HighSpeedSearch(CharBuffer1,0,AS608Para.PS_max,&seach);
-			if(ensure==0x00)//ËÑË÷³É¹¦
+			if(ensure==0x00)//æœç´¢æˆåŠŸ
 			{				
 				OLED_Clear();
-				Show_Str(20,10,128,24,"½âËøÖĞ...",24,0);	
+				Show_Str(20,10,128,24,"è§£é”ä¸­...",24,0);	
 				Walkmotor_ON();
-				Show_Str(20,10,128,24,"ÒÑ½âËø£¡",24,0);
-				OLED_Show_Font(112,18,1);//¿ªËø				
+				Show_Str(20,10,128,24,"å·²è§£é”ï¼",24,0);
+				OLED_Show_Font(112,18,1);//å¼€é”				
 				str=mymalloc(SRAMIN,2000);
-				sprintf(str,"ID:%d      Æ¥Åä·Ö:%d",seach.pageID,seach.mathscore);
+				sprintf(str,"ID:%d      åŒ¹é…åˆ†:%d",seach.pageID,seach.mathscore);
 				Show_Str(0,52,128,12,(u8*)str,12,0);	
 				myfree(SRAMIN,str);
 				delay_ms(1800);
@@ -552,7 +543,7 @@ int press_FR(void)
 	  }
 		else
 			ShowErrMessage(ensure);
-	 BEEP=0;//¹Ø±Õ·äÃùÆ÷	
+	 BEEP=0;//å…³é—­èœ‚é¸£å™¨	
 	 delay_ms(2000);
 		OLED_Clear();
 		
@@ -560,41 +551,41 @@ int press_FR(void)
 	return -1;	
 }
 
-//É¾³ıÖ¸ÎÆ
+//åˆ é™¤æŒ‡çº¹
 void Del_FR(void)
 {
 	u8  ensure;
 	u16 num;
 	OLED_Clear();
-	Show_Str(0,0,128,16,"=== É¾³ıÖ¸ÎÆ ===",16,0);	
-	Show_Str(0,16,128,12,"ÊäÈëÖ¸ÎÆID£º",12,0);
-	Show_Str(0,52,128,12,"·µ»Ø Çå¿Õ    È·ÈÏÉ¾³ı",12,0);
+	Show_Str(0,0,128,16,"=== åˆ é™¤æŒ‡çº¹ ===",16,0);	
+	Show_Str(0,16,128,12,"è¾“å…¥æŒ‡çº¹IDï¼š",12,0);
+	Show_Str(0,52,128,12,"è¿”å› æ¸…ç©º    ç¡®è®¤åˆ é™¤",12,0);
 	delay_ms(50);
 //	AS608_load_keyboard(0,170,(u8**)kbd_delFR);
-	num=GET_NUM();//»ñÈ¡·µ»ØµÄÊıÖµ
+	num=GET_NUM();//è·å–è¿”å›çš„æ•°å€¼
 	if(num==0xFFFF)
-		goto MENU ; //·µ»ØÖ÷Ò³Ãæ
+		goto MENU ; //è¿”å›ä¸»é¡µé¢
 	else if(num==0xFF00)
-		ensure=PS_Empty();//Çå¿ÕÖ¸ÎÆ¿â
+		ensure=PS_Empty();//æ¸…ç©ºæŒ‡çº¹åº“
 	else 
-		ensure=PS_DeletChar(num,1);//É¾³ıµ¥¸öÖ¸ÎÆ
+		ensure=PS_DeletChar(num,1);//åˆ é™¤å•ä¸ªæŒ‡çº¹
 	if(ensure==0)
 	{
 		OLED_Clear();
-		Show_Str(0,20,128,12,"É¾³ıÖ¸ÎÆ³É¹¦£¡",12,0);		
-		Show_Str(80,48,128,12,"Ê£Óà",12,0);		
+		Show_Str(0,20,128,12,"åˆ é™¤æŒ‡çº¹æˆåŠŸï¼",12,0);		
+		Show_Str(80,48,128,12,"å‰©ä½™",12,0);		
 	}
   else
 		ShowErrMessage(ensure);	
 	
-	PS_ValidTempleteNum(&ValidN);//¶Á¿âÖ¸ÎÆ¸öÊı
+	PS_ValidTempleteNum(&ValidN);//è¯»åº“æŒ‡çº¹ä¸ªæ•°
 	OLED_ShowNum(110,48,AS608Para.PS_max-ValidN,3,12);
 	delay_ms(1200);
 	
 MENU:	
 	OLED_Clear();
 }
-//ĞŞ¸ÄÃÜÂë
+//ä¿®æ”¹å¯†ç 
 void SetPassworld(void)
 {
 	int pwd_ch=0;
@@ -603,79 +594,79 @@ void SetPassworld(void)
 	u8 pwd[6]="      ";
 	u8 hidepwd[6]="      ";
 	u8 buf[10];
-	OLED_Clear();//ÇåÆÁ
+	OLED_Clear();//æ¸…å±
 	Show_Str(10,16,128,12," 1   2   3   4  ",12,0);
 	Show_Str(10,28,128,12," 5   6   7   8  ",12,0);
 	Show_Str(10,40,128,12," 9   0  chg Dis ",12,0);
 	Show_Str(10,52,128,12,"Del Clr Bck Ok  ",12,0);
 	while(1)
 	{
-		sprintf((char*)buf,"ĞÂÃÜÂë%d:",pwd_ch+1);
+		sprintf((char*)buf,"æ–°å¯†ç %d:",pwd_ch+1);
 		Show_Str(5,0,128,16,buf,16,0);
 		key_num=Button4_4_Scan();	
 		if(key_num)
 		{	
 			time4=0;
-			if(key_num>=1 && key_num<10 && i>=0 && i<6){  //¡®1-9¡¯¼ü
+			if(key_num>=1 && key_num<10 && i>=0 && i<6){  //â€˜1-9â€™é”®
 				pwd[i]=key_num+0x30;
 				hidepwd[i]='*';
 				i++;
 			}	
-			if(key_num==10 && i>=0 && i<10){       //¡®0¡¯¼ü
+			if(key_num==10 && i>=0 && i<10){       //â€˜0â€™é”®
 				pwd[i]=0x30;
 				hidepwd[i]='*';
 				i++;
 			}
-			if(key_num==11){//ÏÔÊ¾  
+			if(key_num==11){//æ˜¾ç¤º  
 				pwd_ch=!pwd_ch;
 			}
-			if(key_num==12){//ÏÔÊ¾  
+			if(key_num==12){//æ˜¾ç¤º  
 				satus=!satus;
 			}
 			if(key_num==13 && i>0){
-				pwd[--i]=' ';  //¡®del¡¯¼ü
+				pwd[--i]=' ';  //â€˜delâ€™é”®
 				hidepwd[i]=' '; 
 			}
 			if(key_num==14){
 				while(i--){
-					pwd[i]=' ';  //¡®Çå¿Õ¡¯¼ü
-					hidepwd[i]=' ';  //¡®Çå¿Õ¡¯¼ü
+					pwd[i]=' ';  //â€˜æ¸…ç©ºâ€™é”®
+					hidepwd[i]=' ';  //â€˜æ¸…ç©ºâ€™é”®
 				}
 				i=0;
 			}
-			if(key_num==15){//·µ»Ø
-				OLED_Clear();//ÇåÆÁ
+			if(key_num==15){//è¿”å›
+				OLED_Clear();//æ¸…å±
 				delay_ms(500);
 				return ;
 			}
-			if(key_num==16)break;  //¡®Enter¡¯¼ü
+			if(key_num==16)break;  //â€˜Enterâ€™é”®
 		}
 		if(satus==0)OLED_ShowString(70,0,hidepwd,12);
 		else OLED_ShowString(70,0,pwd,12);
 		
 		time4++;
 		if(time4%1000==0){
-			OLED_Clear();//ÇåÆÁ
+			OLED_Clear();//æ¸…å±
 			return ;
 		}
 	}	
 	if(pwd_ch==0)
 	{
 		STMFLASH_Write(0X08020004,(u32*)pwd,2);
-		STMFLASH_Read(0X08020004,(u32*)Pwd,2);	//¶ÁÈ¡ÃÜÂë1
+		STMFLASH_Read(0X08020004,(u32*)Pwd,2);	//è¯»å–å¯†ç 1
 		printf("pwd=%s",Pwd);
 	}
 	else
 	{		
 		STMFLASH_Write(0X08090004,(u32*)pwd,2);
-		STMFLASH_Read(0X08090004,(u32*)Pwd2,2); //¶ÁÈ¡ÃÜÂë2
+		STMFLASH_Read(0X08090004,(u32*)Pwd2,2); //è¯»å–å¯†ç 2
 		printf("pwd2=%s",Pwd2);
 	}
-	OLED_Clear();//ÇåÆÁ
-	Show_Str(0,48,128,16,"ÃÜÂëĞŞ¸Ä³É¹¦ £¡",16,0);
+	OLED_Clear();//æ¸…å±
+	Show_Str(0,48,128,16,"å¯†ç ä¿®æ”¹æˆåŠŸ ï¼",16,0);
 	delay_ms(1000);
 }
-//ÉèÖÃÊ±¼ä
+//è®¾ç½®æ—¶é—´
 void Set_Time(void)
 {
 	RTC_TimeTypeDef RTC_TimeStruct;
@@ -697,14 +688,14 @@ void Set_Time(void)
 	sec=RTC_TimeStruct.RTC_Seconds;
 	OLED_Clear();
 	Show_Str(98,38,128,12,"<--",12,0);
-	Show_Str(0,52,128,12,"¼õ  ¼Ó    ÇĞ»»  È·¶¨",12,0);
+	Show_Str(0,52,128,12,"å‡  åŠ     åˆ‡æ¢  ç¡®å®š",12,0);
 	
 	while(1)
 	{
 		time5++;
 		key_num=Button4_4_Scan();	
 			if(key_num==12 | time5==3000){
-				OLED_Clear();//ÇåÆÁ
+				OLED_Clear();//æ¸…å±
 				return ;
 			}
 			if(key_num==13){
@@ -740,7 +731,7 @@ void Set_Time(void)
 			}
 		if(time5%250==0)
 		{
-			switch(st)			//ÉÁË¸
+			switch(st)			//é—ªçƒ
 				{
 					case 0:OLED_ShowString(0,0,"  ",24);break;
 					case 1:OLED_ShowString(36,0,"  ",24);break;
@@ -763,52 +754,52 @@ void Set_Time(void)
 			OLED_ShowString(110,12,tbuf,12);	
 		}delay_ms(1);
 	}
-	RTC_Set_Time(hour,min,sec,RTC_H12_AM);	//ÉèÖÃÊ±¼ä
-	RTC_Set_Date(year,mon,dat,wek);		//ÉèÖÃÈÕÆÚ
+	RTC_Set_Time(hour,min,sec,RTC_H12_AM);	//è®¾ç½®æ—¶é—´
+	RTC_Set_Date(year,mon,dat,wek);		//è®¾ç½®æ—¥æœŸ
 	OLED_Clear();
-	Show_Str(20,48,128,16,"ÉèÖÃ³É¹¦£¡",16,0);
+	Show_Str(20,48,128,16,"è®¾ç½®æˆåŠŸï¼",16,0);
 	delay_ms(1000);
 }
 
-//Â¼ÈëĞÂ¿¨
+//å½•å…¥æ–°å¡
 u8 Add_Rfid(void)
 {
 	u16 time6=0;
 	u8 i,key_num,status=1,card_size;
 	OLED_Clear();
-	Show_Str(0,0,128,16,"=== Â¼Èë¿¨Æ¬ ===",16,0);	
-	Show_Str(0,20,128,12,"Çë·ÅÈëĞÂ¿¨Æ¬£º",12,0);	
-	Show_Str(0,52,128,12,"·µ»Ø",12,0);
-	MFRC522_Initializtion();			//³õÊ¼»¯MFRC522
+	Show_Str(0,0,128,16,"=== å½•å…¥å¡ç‰‡ ===",16,0);	
+	Show_Str(0,20,128,12,"è¯·æ”¾å…¥æ–°å¡ç‰‡ï¼š",12,0);	
+	Show_Str(0,52,128,12,"è¿”å›",12,0);
+	MFRC522_Initializtion();			//åˆå§‹åŒ–MFRC522
 	while(1)
 	{
 		AntennaOn();
-		status=MFRC522_Request(0x52, card_pydebuf);			//Ñ°¿¨
-		if(status==0)		//Èç¹û¶Áµ½¿¨
+		status=MFRC522_Request(0x52, card_pydebuf);			//å¯»å¡
+		if(status==0)		//å¦‚æœè¯»åˆ°å¡
 		{
 			printf("rc522 ok\n");
-			Show_Str(0,38,128,12,"¶Á¿¨³É¹¦£¡",12,0);
-			status=MFRC522_Anticoll(card_numberbuf);			//·À×²´¦Àí			
-			card_size=MFRC522_SelectTag(card_numberbuf);	//Ñ¡¿¨
-			status=MFRC522_Auth(0x60, 4, card_key0Abuf, card_numberbuf);	//Ñé¿¨
-			status=MFRC522_Write(4, card_writebuf);				//Ğ´¿¨£¨Ğ´¿¨ÒªĞ¡ĞÄ£¬ÌØ±ğÊÇ¸÷ÇøµÄ¿é3£©
-			status=MFRC522_Read(4, card_readbuf);					//¶Á¿¨
-			printf("¿¨µÄÀàĞÍ£º%#x %#x",card_pydebuf[0],card_pydebuf[1]);
-			//¿¨ĞòÁĞºÅÏÔ£¬×îºóÒ»×Ö½ÚÎª¿¨µÄĞ£ÑéÂë
-			printf("¿¨µÄĞòÁĞºÅ£º");
+			Show_Str(0,38,128,12,"è¯»å¡æˆåŠŸï¼",12,0);
+			status=MFRC522_Anticoll(card_numberbuf);			//é˜²æ’å¤„ç†			
+			card_size=MFRC522_SelectTag(card_numberbuf);	//é€‰å¡
+			status=MFRC522_Auth(0x60, 4, card_key0Abuf, card_numberbuf);	//éªŒå¡
+			status=MFRC522_Write(4, card_writebuf);				//å†™å¡ï¼ˆå†™å¡è¦å°å¿ƒï¼Œç‰¹åˆ«æ˜¯å„åŒºçš„å—3ï¼‰
+			status=MFRC522_Read(4, card_readbuf);					//è¯»å¡
+			printf("å¡çš„ç±»å‹ï¼š%#x %#x",card_pydebuf[0],card_pydebuf[1]);
+			//å¡åºåˆ—å·æ˜¾ï¼Œæœ€åä¸€å­—èŠ‚ä¸ºå¡çš„æ ¡éªŒç 
+			printf("å¡çš„åºåˆ—å·ï¼š");
 			for(i=0;i<5;i++)
 			{
 				printf("%#x ",card_numberbuf[i]);
 			}
 			printf("\n");
-			//¿¨ÈİÁ¿ÏÔÊ¾£¬µ¥Î»ÎªKbits
-			printf("¿¨µÄÈİÁ¿£º%dKbits\n",card_size);
+			//å¡å®¹é‡æ˜¾ç¤ºï¼Œå•ä½ä¸ºKbits
+			printf("å¡çš„å®¹é‡ï¼š%dKbits\n",card_size);
 			AntennaOff();
-			Show_Str(0,38,128,12,"ÕıÔÚÂ¼Èë.",12,0);
+			Show_Str(0,38,128,12,"æ­£åœ¨å½•å…¥.",12,0);
 			STMFLASH_Write(0X080f0004,(u32*)card_numberbuf,2);
-			STMFLASH_Read(0X080f0004,(u32*)cardid,1); //¶ÁÈ¡¿¨ºÅ1
+			STMFLASH_Read(0X080f0004,(u32*)cardid,1); //è¯»å–å¡å·1
 			printf("cardid={%X,%X,%X,%X}\n",cardid[0],cardid[1],cardid[2],cardid[3]);
-			Show_Str(0,38,128,12,"Â¼Èë³É¹¦£¡",12,0);
+			Show_Str(0,38,128,12,"å½•å…¥æˆåŠŸï¼",12,0);
 			delay_ms(1000);
 			OLED_Clear();
 			return 0;
@@ -822,29 +813,29 @@ u8 Add_Rfid(void)
 		}
 	}
 }
-//rfid¿¨Ëø
+//rfidå¡é”
 u8 MFRC522_lock(void)
 {
 	u8 i,j,status=1,card_size;
 	u8 count;
 	AntennaOn();
-  status=MFRC522_Request(0x52, card_pydebuf);			//Ñ°¿¨
-	if(status==0)		//Èç¹û¶Áµ½¿¨
+  status=MFRC522_Request(0x52, card_pydebuf);			//å¯»å¡
+	if(status==0)		//å¦‚æœè¯»åˆ°å¡
 	{
 		printf("rc522 ok\n");
-		status=MFRC522_Anticoll(card_numberbuf);			//·À×²´¦Àí			
-		card_size=MFRC522_SelectTag(card_numberbuf);	//Ñ¡¿¨
-		status=MFRC522_Auth(0x60, 4, card_key0Abuf, card_numberbuf);	//Ñé¿¨
-		status=MFRC522_Write(4, card_writebuf);				//Ğ´¿¨£¨Ğ´¿¨ÒªĞ¡ĞÄ£¬ÌØ±ğÊÇ¸÷ÇøµÄ¿é3£©
-		status=MFRC522_Read(4, card_readbuf);					//¶Á¿¨
-		//MFRC522_Halt();															//Ê¹¿¨½øÈëĞİÃß×´Ì¬
-		//¿¨ÀàĞÍÏÔÊ¾
+		status=MFRC522_Anticoll(card_numberbuf);			//é˜²æ’å¤„ç†			
+		card_size=MFRC522_SelectTag(card_numberbuf);	//é€‰å¡
+		status=MFRC522_Auth(0x60, 4, card_key0Abuf, card_numberbuf);	//éªŒå¡
+		status=MFRC522_Write(4, card_writebuf);				//å†™å¡ï¼ˆå†™å¡è¦å°å¿ƒï¼Œç‰¹åˆ«æ˜¯å„åŒºçš„å—3ï¼‰
+		status=MFRC522_Read(4, card_readbuf);					//è¯»å¡
+		//MFRC522_Halt();															//ä½¿å¡è¿›å…¥ä¼‘çœ çŠ¶æ€
+		//å¡ç±»å‹æ˜¾ç¤º
 		
-		printf("¿¨µÄÀàĞÍ£º%#x %#x",card_pydebuf[0],card_pydebuf[1]);
+		printf("å¡çš„ç±»å‹ï¼š%#x %#x",card_pydebuf[0],card_pydebuf[1]);
 		
 
-		//¿¨ĞòÁĞºÅÏÔ£¬×îºóÒ»×Ö½ÚÎª¿¨µÄĞ£ÑéÂë
-		printf("¿¨µÄĞòÁĞºÅ£º");
+		//å¡åºåˆ—å·æ˜¾ï¼Œæœ€åä¸€å­—èŠ‚ä¸ºå¡çš„æ ¡éªŒç 
+		printf("å¡çš„åºåˆ—å·ï¼š");
 		count=0;
 		for(i=0;i<5;i++)
 		{
@@ -853,26 +844,26 @@ u8 MFRC522_lock(void)
 		}
 		if(count==4)
 		{
-			printf("rfid Æ¥Åä³É¹¦£¬½âËø\n");
+			printf("rfid åŒ¹é…æˆåŠŸï¼Œè§£é”\n");
 			OLED_Clear();
-			Show_Str(20,10,128,24,"½âËøÖĞ...",24,0);	
+			Show_Str(20,10,128,24,"è§£é”ä¸­...",24,0);	
 			Walkmotor_ON();
-			Show_Str(20,10,128,24,"ÒÑ½âËø£¡",24,0);
+			Show_Str(20,10,128,24,"å·²è§£é”ï¼",24,0);
 			return 0;
 		}
 		
 		printf("\n");
-		//¿¨ÈİÁ¿ÏÔÊ¾£¬µ¥Î»ÎªKbits
+		//å¡å®¹é‡æ˜¾ç¤ºï¼Œå•ä½ä¸ºKbits
 		
-		printf("¿¨µÄÈİÁ¿£º%dKbits\n",card_size);
+		printf("å¡çš„å®¹é‡ï¼š%dKbits\n",card_size);
 		
 		
 		
-		//¶ÁÒ»¸ö¿éµÄÊı¾İÏÔÊ¾
-		printf("¿¨Êı¾İ£º\n");
-		for(i=0;i<2;i++)		//·ÖÁ½ĞĞÏÔÊ¾
+		//è¯»ä¸€ä¸ªå—çš„æ•°æ®æ˜¾ç¤º
+		printf("å¡æ•°æ®ï¼š\n");
+		for(i=0;i<2;i++)		//åˆ†ä¸¤è¡Œæ˜¾ç¤º
 		{
-			for(j=0;j<9;j++)	//Ã¿ĞĞÏÔÊ¾8¸ö
+			for(j=0;j<9;j++)	//æ¯è¡Œæ˜¾ç¤º8ä¸ª
 			{
 				printf("%#x ",card_readbuf[j+i*9]);
 			}
@@ -884,18 +875,18 @@ u8 MFRC522_lock(void)
 	AntennaOff();
 	return 1;
 }
-//ÏÔÊ¾ĞÅÏ¢
+//æ˜¾ç¤ºä¿¡æ¯
 void Massige(void)
 {
 	OLED_Clear();
-	Show_Str(0,0,128,12,"ÖÇÄÜÃÅËøÏµÍ³",12,0); 
-	Show_Str(0,13,128,12,"×÷Õß£º»¯×÷³¾",12,0); 
-	Show_Str(0,26,128,12,"Ê±¼ä:2020-6-25",12,0);
+	Show_Str(0,0,128,12,"æ™ºèƒ½é—¨é”ç³»ç»Ÿ",12,0); 
+	Show_Str(0,13,128,12,"ä½œè€…ï¼šåŒ–ä½œå°˜",12,0); 
+	Show_Str(0,26,128,12,"æ—¶é—´:2020-6-25",12,0);
 	Show_Str(0,39,128,12,"qq:2809786963",12,0); 
-	Show_Str(0,52,128,12,"CSDN£º»¯×÷³¾",12,0); 
+	Show_Str(0,52,128,12,"CSDNï¼šåŒ–ä½œå°˜",12,0); 
 	delay_ms(3000);
 }
-//¿ª»úĞÅÏ¢
+//å¼€æœºä¿¡æ¯
 void starting(void)
 {
 	u8 ensure;
@@ -904,23 +895,23 @@ void starting(void)
 	OLED_Show_Image(0);	//image
 	delay_ms(3000);
 	OLED_Clear();
-	while(font_init()) 			//¼ì²é×Ö¿â
+	while(font_init()) 			//æ£€æŸ¥å­—åº“
 	{
 			OLED_Clear();	   	   	  
 			OLED_ShowString(0,0,"Explorer STM32F4",6);
-			OLED_Refresh_Gram();//¸üĞÂOLED	
-			while(SD_Init())			//¼ì²âSD¿¨
+			OLED_Refresh_Gram();//æ›´æ–°OLED	
+			while(SD_Init())			//æ£€æµ‹SDå¡
 			{
 				OLED_ShowString(0,12,"SD Card Failed!",6);
 				delay_ms(200);
 				OLED_ShowString(0,12,"               ",6);
 				delay_ms(200);	
-				OLED_Refresh_Gram();//¸üĞÂOLED	
+				OLED_Refresh_Gram();//æ›´æ–°OLED	
 			}								 						    
 				OLED_ShowString(0,24,"SD Card OK",6);
 				OLED_ShowString(0,36,"Font Updating...",6);
-				key=update_font(20,110,16,"0:");//¸üĞÂ×Ö¿â
-			while(key)//¸üĞÂÊ§°Ü		
+				key=update_font(20,110,16,"0:");//æ›´æ–°å­—åº“
+			while(key)//æ›´æ–°å¤±è´¥		
 			{			 		  
 				//LCD_ShowString(30,110,200,16,16,"Font Update Failed!");
 				OLED_ShowString(0,48,"Font Update Failed!",6);
@@ -929,11 +920,11 @@ void starting(void)
 				delay_ms(200);		       
 			} 		    
 	} 
-/*********************************¿ª»úĞÅÏ¢ÌáÊ¾***********************************/
+/*********************************å¼€æœºä¿¡æ¯æç¤º***********************************/
 	OLED_Clear();
 	Show_Str(0,0,128,12,"fingerprint system!",12,0); 
 	Show_Str(0,12,128,12,"connect to as608",12,0);
-	while(PS_HandShake(&AS608Addr))//ÓëAS608Ä£¿éÎÕÊÖ
+	while(PS_HandShake(&AS608Addr))//ä¸AS608æ¨¡å—æ¡æ‰‹
 	{
 		delay_ms(400);
 		Show_Str(0,24,128,12,"connect failed! ",12,0);
@@ -944,10 +935,10 @@ void starting(void)
 	str=mymalloc(SRAMIN,30);
 	sprintf(str,"baud:%d  addr:%x",usart2_baund,AS608Addr);
 	Show_Str(0,36,128,12,(u8*)str,12,0);
-	ensure=PS_ValidTempleteNum(&ValidN);//¶Á¿âÖ¸ÎÆ¸öÊı
+	ensure=PS_ValidTempleteNum(&ValidN);//è¯»åº“æŒ‡çº¹ä¸ªæ•°
 	if(ensure!=0x00)
-		ShowErrMessage(ensure);//ÏÔÊ¾È·ÈÏÂë´íÎóĞÅÏ¢	
-	ensure=PS_ReadSysPara(&AS608Para);  //¶Á²ÎÊı 
+		ShowErrMessage(ensure);//æ˜¾ç¤ºç¡®è®¤ç é”™è¯¯ä¿¡æ¯	
+	ensure=PS_ReadSysPara(&AS608Para);  //è¯»å‚æ•° 
 	
 	if(ensure==0x00)
 	{
@@ -961,11 +952,11 @@ void starting(void)
 	myfree(SRAMIN,str);
 	delay_ms(1000);
 	OLED_Clear();
-//	Show_Str(23,10,128,24,"»¯",24,0);			
+//	Show_Str(23,10,128,24,"åŒ–",24,0);			
 //	delay_ms(300);
-//	Show_Str(47,10,128,24,"×÷",24,0);			
+//	Show_Str(47,10,128,24,"ä½œ",24,0);			
 //	delay_ms(300);
-//	Show_Str(71,10,128,24,"³¾",24,0);	
+//	Show_Str(71,10,128,24,"å°˜",24,0);	
 	
 }
 
